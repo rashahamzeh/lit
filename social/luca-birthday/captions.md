@@ -17,9 +17,9 @@ To edit text: change `cards.html`, then re-render (open in a browser and screens
 
 **Instagram (main post / carousel)**
 > Today's episode is a special one 🎂
-> Happy birthday to the voice behind LIT, Luca! Here's to another year of real people, real stories, and the insights that actually matter.
+> Happy birthday to the voice behind Luca's Insight Track, Luca! Here's to another year of real people, real stories, and the insights that actually matter.
 > Drop your birthday wishes below 👇
-> #LucasInsightTrack #LIT #HappyBirthday #PodcastHost #RealStories
+> #LucasInsightTrack #HappyBirthday #PodcastHost #RealStories
 
 **LinkedIn**
 > Every conversation on Luca's Insight Track starts with one person asking the right questions.
@@ -29,7 +29,7 @@ To edit text: change `cards.html`, then re-render (open in a browser and screens
 **X / Threads**
 > Special episode: "Another Year, More Insight" 🎧
 > Guest of honour: Luca · Runtime: 365 days
-> Happy birthday to our host! 🎂 #LIT
+> Happy birthday to our host! 🎂 #LucasInsightTrack
 
 **Story text (sticker prompt)**
 > Leave Luca a birthday wish 🎉

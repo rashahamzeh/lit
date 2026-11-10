@@ -132,7 +132,7 @@ def s_portrait(u):
     p = eo(prog(u, .3, .35)); paste(cv, SP['allam'], W + 500 - (W / 2 + 500) * p, 1560)
     return cv.convert('RGB')
 
-WORDS = [('host', 'studio', 2.8, .47, .27, -4), ('speaker', 'interview', 2.2, .66, .34, 3),
+WORDS = [('host', 'studio', 1.15, .47, .3, -4), ('speaker', 'interview', 2.2, .66, .34, 3),
          ('author', 'signing', 2.3, .58, .27, -3), ('legend', 'fan', 2.2, .2, .42, 4)]
 def s_words(u):
     i = min(3, int(u / BEAT)); w, img, z, fx, fy, rot = WORDS[i]; v = u - i * BEAT
@@ -254,7 +254,7 @@ def s_finale(u):
     q = prog(u, .25, .35); paste(cv, SP['hbd'], W / 2, 560, (.6 + .4 * eob(q)) * pulse(t), cl(q * 3))
     q = prog(u, .75, .4); paste(cv, SP['lucay'], W / 2, 840, (1.7 - .7 * eob(q)) * pulse(t), cl(q * 3), 4 * (1 - eo(q)))
     q = prog(u, 1.6, .5); paste(cv, SP['from'], W / 2, 1040 + 20 * (1 - eo(q)), 1, q)
-    q = prog(u, 2.0, .5); paste(cv, SP['lit'], W / 2, 1110, 1, q)
+    q = prog(u, 2.0, .5); paste(cv, SP['lit'], W / 2, 1110, min(1, 1000 / SP['lit'].width), q)
     confetti(cv, u)
     return cv.convert('RGB')
 
