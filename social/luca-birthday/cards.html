@@ -1,0 +1,135 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B1F17;--green:#1A3328;--mid:#254D3A;--gold:#C9960A;--yellow:#FFCF00;--cream:#F2EDE4;--ink:#203A35}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#888;padding:40px;display:flex;flex-direction:column;gap:40px;align-items:flex-start}
+.card{position:relative;overflow:hidden;font-family:'Instrument Sans',sans-serif}
+.serif{font-family:'Playfair Display',serif}
+.eyebrow{display:inline-flex;align-items:center;gap:14px;border:2px solid rgba(201,150,10,.5);border-radius:100px;padding:12px 28px;color:var(--gold);font-weight:600;letter-spacing:.2em;text-transform:uppercase;font-size:22px}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--yellow)}
+.glow{position:absolute;border-radius:50%;filter:blur(10px);pointer-events:none}
+.confetti i{position:absolute;display:block;border-radius:3px}
+.card > :not(.confetti){position:relative;z-index:2}
+.handle{font-weight:500;letter-spacing:.06em;font-size:24px}
+
+/* 1 ─ Feed post, dark */
+#feed{width:1080px;height:1350px;background:radial-gradient(ellipse 80% 55% at 50% 30%,#1E4334 0%,var(--bg) 70%);color:var(--cream);display:flex;flex-direction:column;align-items:center;text-align:center;padding:110px 90px 90px}
+#feed .bulb{width:290px;margin:50px 0 30px}
+#feed h1{font-size:132px;line-height:.98;font-weight:700}
+#feed h1 em{display:block;font-style:italic;font-weight:400;color:var(--yellow);font-size:170px;margin-top:6px}
+#feed p{font-size:32px;line-height:1.5;color:rgba(242,237,228,.78);max-width:800px;margin-top:36px}
+#feed .foot{position:absolute!important;bottom:70px;left:90px;right:90px;display:flex;justify-content:space-between;align-items:center;color:rgba(242,237,228,.55)}
+#feed .foot img{height:86px;border-radius:14px}
+
+/* 2 ─ Story */
+#story{width:1080px;height:1920px;background:linear-gradient(180deg,var(--bg) 0%,#123227 60%,var(--bg) 100%);color:var(--cream);display:flex;flex-direction:column;align-items:center;text-align:center;padding:200px 90px}
+#story .logo{width:220px;border-radius:32px;margin-bottom:90px}
+#story .big{font-size:300px;line-height:.85;font-weight:700;color:var(--yellow);font-style:italic}
+#story h2{font-size:96px;line-height:1.05;margin-top:40px;font-weight:700}
+#story h2 em{font-style:italic;font-weight:400;color:var(--gold)}
+#story .quote{margin-top:110px;border-top:2px solid rgba(201,150,10,.4);border-bottom:2px solid rgba(201,150,10,.4);padding:60px 20px;font-size:46px;line-height:1.4;font-style:italic;color:rgba(242,237,228,.9)}
+#story .cta{margin-top:auto;background:var(--yellow);color:var(--bg);font-weight:700;font-size:34px;padding:30px 56px;border-radius:100px;letter-spacing:.02em}
+
+/* 3 ─ "Now playing" episode card (square) */
+#ep{width:1080px;height:1080px;background:var(--cream);color:var(--bg);padding:80px}
+#ep .player{background:var(--bg);color:var(--cream);border-radius:44px;height:100%;padding:64px;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(11,31,23,.35)}
+#ep .top{display:flex;justify-content:space-between;align-items:center}
+#ep .top img{height:110px;border-radius:20px}
+#ep .tag{color:var(--yellow);font-weight:600;letter-spacing:.2em;font-size:22px;text-transform:uppercase}
+#ep h3{font-size:30px;color:rgba(242,237,228,.6);font-weight:500;margin-top:56px;letter-spacing:.04em}
+#ep h1{font-size:96px;line-height:1.02;margin-top:14px;font-weight:700}
+#ep h1 em{font-style:italic;font-weight:400;color:var(--yellow)}
+#ep .meta{display:flex;gap:36px;margin-top:34px;font-size:26px;color:rgba(242,237,228,.7)}
+#ep .meta b{color:var(--cream);font-weight:600}
+#ep .bar{margin-top:auto;height:10px;background:rgba(242,237,228,.15);border-radius:10px;position:relative}
+#ep .bar span{position:absolute;inset:0 auto 0 0;width:100%;background:var(--yellow);border-radius:10px}
+#ep .bar span::after{content:'';position:absolute;right:-12px;top:-9px;width:28px;height:28px;border-radius:50%;background:var(--yellow)}
+#ep .times{display:flex;justify-content:space-between;margin-top:18px;font-size:24px;color:rgba(242,237,228,.6)}
+#ep .ctrl{display:flex;justify-content:center;align-items:center;gap:80px;margin-top:30px}
+#ep .play{width:120px;height:120px;border-radius:50%;background:var(--yellow);display:grid;place-items:center}
+
+/* 4 ─ Feed post, cream / quote */
+#cream{width:1080px;height:1350px;background:var(--cream);color:var(--bg);padding:110px 100px;display:flex;flex-direction:column}
+#cream .eyebrow{border-color:rgba(11,31,23,.2);color:var(--bg);align-self:flex-start}
+#cream .q{font-size:300px;line-height:.6;color:var(--gold);margin-top:90px;height:130px}
+#cream h1{font-size:92px;line-height:1.1;font-weight:700}
+#cream h1 em{font-style:italic;font-weight:400;color:var(--gold)}
+#cream .sign{margin-top:60px;font-size:34px;color:#4A5E56;line-height:1.5}
+#cream .foot{margin-top:auto;display:flex;align-items:flex-end;justify-content:space-between}
+#cream .foot img{height:150px;}
+#cream .hb{font-size:58px;font-style:italic;color:var(--bg);text-align:right;line-height:1.1}
+#cream .hb b{display:block;font-style:normal;font-family:'Instrument Sans';font-size:22px;letter-spacing:.24em;color:var(--gold);margin-bottom:12px}
+</style></head><body>
+
+<!-- 1 FEED (dark) -->
+<div class="card" id="feed">
+  <div class="confetti" data-n="34"></div>
+  <span class="eyebrow"><span class="dot"></span>Today on LIT</span>
+  <svg class="bulb" viewBox="0 0 200 220" fill="none">
+    <!-- lightbulb that doubles as a birthday candle -->
+    <circle cx="100" cy="88" r="78" fill="rgba(255,207,0,.10)"/>
+    <path d="M100 18c-40 0-70 30-70 68 0 26 14 42 28 56 9 9 14 18 14 28h56c0-10 5-19 14-28 14-14 28-30 28-56 0-38-30-68-70-68z" stroke="#F2EDE4" stroke-width="9" stroke-linejoin="round"/>
+    <path d="M100 168V102" stroke="#FFCF00" stroke-width="9" stroke-linecap="round"/>
+    <path d="M100 96c-14-6-16-24-4-34 7 10 18 14 14 26-2 5-6 7-10 8z" fill="#FFCF00"/>
+    <path d="M74 182h52M80 198h40" stroke="#F2EDE4" stroke-width="9" stroke-linecap="round"/>
+  </svg>
+  <h1 class="serif">Happy Birthday<em>Luca</em></h1>
+  <p>Here's to another year of real people, real stories, and the insights that actually matter.</p>
+  <div class="foot"><span class="handle">@lucasinsighttrack</span><img src="logo.png"></div>
+</div>
+
+<!-- 2 STORY -->
+<div class="card" id="story">
+  <div class="confetti" data-n="46"></div>
+  <img class="logo" src="logo.png">
+  <span class="eyebrow"><span class="dot"></span>Birthday Episode</span>
+  <div class="big serif" style="margin-top:90px">HBD</div>
+  <h2 class="serif">to our host,<br><em>Luca</em></h2>
+  <div class="quote serif">“The best insights come from<br>real conversations.<br>Here’s to many more.”</div>
+  <div class="cta">Drop Luca a birthday wish 🎉</div>
+</div>
+
+<!-- 3 EPISODE CARD -->
+<div class="card" id="ep">
+  <div class="player">
+    <div class="top"><span class="tag">● Now Playing</span><img src="logo.png"></div>
+    <h3>LUCA'S INSIGHT TRACK · SPECIAL EPISODE</h3>
+    <h1 class="serif">Another Year,<br><em>More Insight</em></h1>
+    <div class="meta"><span>Guest of honour: <b>Luca</b></span><span>Runtime: <b>365 days</b></span></div>
+    <div class="bar"><span></span></div>
+    <div class="times"><span>Year in review</span><span>Next season loading…</span></div>
+    <div class="ctrl">
+      <svg width="54" height="54" viewBox="0 0 24 24" fill="#F2EDE4" opacity=".7"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg>
+      <div class="play"><svg width="54" height="54" viewBox="0 0 24 24" fill="#0B1F17"><path d="M7 4l14 8-14 8z"/></svg></div>
+      <svg width="54" height="54" viewBox="0 0 24 24" fill="#F2EDE4" opacity=".7"><path d="M16 5h2v14h-2zM4 5l11 7-11 7z"/></svg>
+    </div>
+  </div>
+</div>
+
+<!-- 4 FEED (cream) -->
+<div class="card" id="cream">
+  <span class="eyebrow"><span class="dot"></span>A note for the host</span>
+  <div class="q serif">“</div>
+  <h1 class="serif">To the person who asks the questions that <em>bring out the best</em> in every guest.</h1>
+  <p class="sign">Thank you for every story, every insight, and every conversation that makes LIT what it is.</p>
+  <div class="foot"><img src="logo-transparent.png"><div class="hb serif"><b>10 NOV</b>Happy Birthday,<br>Luca 🎂</div></div>
+</div>
+
+<script>
+// deterministic confetti in brand colours
+let seed=7;const r=()=>(seed=(seed*16807)%2147483647)/2147483647;
+const cols=['#FFCF00','#C9960A','#F2EDE4','#3E7A5E'];
+document.querySelectorAll('.confetti').forEach(c=>{
+  const host=c.parentElement,W=host.offsetWidth,H=host.offsetHeight;
+  for(let i=0;i<+c.dataset.n;i++){
+    const e=document.createElement('i');const w=6+r()*12;
+    // keep confetti near the edges so it frames the copy
+    const edge=r()<.5;let x=edge?(r()<.5?r()*.1:.9+r()*.1):r(),y=edge?r():(r()<.5?r()*.07:.93+r()*.07);
+    Object.assign(e.style,{left:x*W+'px',top:y*H+'px',width:w+'px',height:(r()<.4?w:w*2.4)+'px',background:cols[i%4],transform:`rotate(${r()*360}deg)`,opacity:.55+r()*.45,borderRadius:r()<.3?'50%':'3px'});
+    c.appendChild(e);
+  }
+});
+</script>
+</body></html>
