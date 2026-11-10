@@ -3,7 +3,7 @@ import math, random, subprocess, sys
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageOps
 
-W, H, FPS, DUR = 1080, 1920, 30, 38.0
+W, H, FPS, DUR = 1080, 1920, 30, 44.0
 BEAT = 0.5
 GREEN = (11, 31, 23); CREAM = (242, 237, 228); YEL = (255, 207, 0); GOLD = (201, 150, 10)
 
@@ -15,10 +15,7 @@ PH['book'] = PH['book'].crop((40, 0, PH['book'].width, PH['book'].height))
 SP = {k: lo(f'sp/{k}.png').convert('RGBA') for k in [
     'today', 'voice', 'luca', 'allam', 'host', 'speaker', 'author', 'legend', 'bestseller', 'launch',
     'talkhuman', 'sig', 'role', 'husband', 'dad', 'best', 'dadw', 'ever', 'kingpin', 'gameon',
-    'hbd', 'lucay', 'from', 'lit', 'logo']}
-SP['logo'] = SP['logo'].resize((230, 230))
-mask = Image.new('L', (230, 230), 0); ImageDraw.Draw(mask).rounded_rectangle((0, 0, 229, 229), 40, fill=255)
-SP['logo'].putalpha(mask)
+    'hbd', 'lucay', 'from', 'lit', 'butwe', 'remember', 'you', 'lucabox', 'logo_white']}
 CUT = lo('../reel/Luca_Cutout.png').convert('RGBA')
 
 # ---------- helpers ----------
@@ -55,7 +52,7 @@ def grad_bottom(h=900, a=235):
     g = Image.new('RGBA', (W, H), (0, 0, 0, 0)); arr = np.zeros((H, W, 4), np.uint8); arr[..., :3] = GREEN
     ramp = np.clip((np.arange(H) - (H - h)) / h, 0, 1) ** 1.3 * a; arr[..., 3] = ramp[:, None]
     return Image.fromarray(arr)
-GRAD = grad_bottom(); GRAD_TOP = GRAD.transpose(Image.FLIP_TOP_BOTTOM)
+GRAD = grad_bottom(); GRAD_TOP = GRAD.transpose(Image.FLIP_TOP_BOTTOM); GRAD_LITE = grad_bottom(700, 150)
 
 def card(img, w, fx=.5, fy=.5, ar=.8, border=22, bottom=70):
     h = int(w / ar); ph = cover(img, 1.0, fx, fy, w, h)
@@ -80,7 +77,7 @@ def load_seg(ss, d):
                         '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], capture_output=True, check=True).stdout
     fh = len(p) // (1080 * 3) // int(d * FPS)
     arr = np.frombuffer(p, np.uint8).reshape(-1, fh, 1080, 3); return [Image.fromarray(a) for a in arr]
-SEG1 = load_seg(2.0, 2.1); SEG2 = load_seg(22.4, 2.1)
+SEG1 = load_seg(2.0, 2.1); SEG2 = load_seg(20.4, 5.1)
 def snippet(seg, u):
     f = seg[min(len(seg) - 1, int(u * FPS))]
     bg = f.resize((54, 96), Image.BILINEAR, box=(f.width * .2, 0, f.width * .8, f.height)).filter(ImageFilter.GaussianBlur(3)).resize((W, H), Image.BILINEAR)
@@ -120,7 +117,7 @@ def confetti(cv, u):
 # ---------- scenes (u = local time) ----------
 def s_intro(u):
     cv = BG_DARK.copy(); bokeh(cv, u)
-    p1 = eo(prog(u, .4, .6)); paste(cv, SP['today'], W / 2, 860 + 60 * (1 - p1), 1, p1)
+    p1 = eo(prog(u, .4, .6)); paste(cv, SP['today'], W / 2, 800 + 60 * (1 - p1), 1, p1)
     p2 = prog(u, 1.5, .55); paste(cv, SP['voice'], W / 2, 1010, .6 + .4 * eob(p2), cl(p2 * 2))
     if u > 2.5:  # little beat bounces as the riser builds
         k = math.exp(-((u - 2.5) % .25) * 14) * .03
@@ -178,8 +175,24 @@ def s_split(u):
     ImageDraw.Draw(cv).rectangle((0, hh, int(W * eo(prog(u, .4, .4))), hh + 20), fill=YEL)
     return cv
 
+def s_remember(u):
+    t = 23 + u; cv = BG_DARK.copy().convert('RGBA'); bokeh(cv, t, YEL)
+    m = eo(prog(u, 1.0, .35))  # lines glide up when the beat hits
+    if u >= 1.0:
+        g = Image.new('RGBA', (W, H), (0, 0, 0, 0)); ImageDraw.Draw(g).ellipse((90, 520, 990, 1420), fill=YEL + (60,))
+        cv.alpha_composite(g.filter(ImageFilter.GaussianBlur(120)))
+        q = eo(prog(u, 1.0, .45)); z = 1.06 - .06 * q
+        cut = CUT.resize((int(1080 * z * pulse(t, 24)), int(1080 * z * pulse(t, 24) * CUT.height / CUT.width)), Image.BILINEAR)
+        cv.alpha_composite(cut, (int(W / 2 - cut.width / 2), int(H - cut.height + 500 * (1 - q) + 40)))
+        cv.alpha_composite(grad_bottom(520, 170) if False else GRAD_LITE)
+    p = eo(prog(u, .05, .45)); paste(cv, SP['butwe'], W / 2, 770 - 530 * m + 40 * (1 - p), 1, p)
+    p = prog(u, .5, .3); paste(cv, SP['remember'], W / 2, 930 - 520 * m, .75 + .25 * eob(p), cl(p * 2))
+    q = prog(u, 1.0, .2); paste(cv, SP['you'], W / 2, 1290, (2.4 - 1.4 * eob(q)) * pulse(t, 24), cl(q * 3))
+    q = prog(u, 1.5, .2); paste(cv, SP['lucabox'], W / 2, 1610, (2.4 - 1.4 * eob(q)) * pulse(t, 24), cl(q * 3), -3 * eo(q))
+    return cv.convert('RGB')
+
 def s_role(u):
-    t = 20 + u; cv = solid(CREAM)
+    cv = solid(CREAM)
     p = eo(prog(u, .05, .5)); paste(cv, SP['role'], W / 2, 330 + 50 * (1 - p), 1, p)
     for name, t0, x, y, r in [('selfie', .75, 330, 1050, -8), ('dinner', 1.25, 760, 1100, 7)]:
         q = prog(u, t0, .4)
@@ -197,7 +210,7 @@ def s_dad(u):
     return cv
 
 def s_best(u):
-    t = 24 + u
+    t = 30 + u
     if u < 1.0: cv = cover(PH['dinoday'], (1.35 - .25 * eo(u / .5)) * pulse(t), .47, .5)
     else: cv = cover(PH['dinonight'], (1.25 - .15 * eo((u - 1) / .5)) * pulse(t), .55, .5)
     cv = cv.convert('RGBA'); cv.alpha_composite(GRAD)
@@ -206,7 +219,7 @@ def s_best(u):
     return cv.convert('RGB')
 
 def s_bowl(u):
-    t = 26 + u
+    t = 32 + u
     z = 2.4 if u < .5 else 2.4 - 1.3 * eo((u - .5) / .45)
     fy = .29 if u < .5 else .29 + (.45 - .29) * eo((u - .5) / .45)
     cv = cover(PH['bowl'], z * pulse(t), .47, fy).convert('RGBA'); cv.alpha_composite(GRAD)
@@ -216,7 +229,7 @@ def s_bowl(u):
 
 GRID = [('selfie', .5, .45), ('bday', .6, .4), ('signing', .48, .5), ('studio', .47, .3)]
 def s_grid(u):
-    t = 28 + u; cv = solid(GREEN); tw, th = (W - 18) // 2, (H - 18) // 2
+    t = 34 + u; cv = solid(GREEN); tw, th = (W - 18) // 2, (H - 18) // 2
     pos = [(6, 6), (12 + tw, 6), (6, 12 + th), (12 + tw, 12 + th)]; dirs = [(-1, 0), (0, -1), (0, 1), (1, 0)]
     for i, ((k, fx, fy), (x, y), (dx, dy)) in enumerate(zip(GRID, pos, dirs)):
         q = eo(prog(u, i * .25, .3))
@@ -233,11 +246,11 @@ def s_flips(u):
     return cover(PH[k], (1.6 - .35 * eo(v / .2)), fx, fy)
 
 def s_finale(u):
-    t = 32 + u; cv = BG_DARK.copy().convert('RGBA'); bokeh(cv, t, YEL)
+    t = 38 + u; cv = BG_DARK.copy().convert('RGBA'); bokeh(cv, t, YEL)
     q = prog(u, .5, .7); cut = CUT.resize((980, int(980 * CUT.height / CUT.width)), Image.BILINEAR)
     cv.alpha_composite(cut, (int(W / 2 - 490), int(1180 + 600 * (1 - eo(q)))))
     g = grad_bottom(380, 200) if False else None
-    paste(cv, SP['logo'], W / 2, 250, eob(prog(u, 0, .4)), 1)
+    paste(cv, SP['logo_white'], W / 2, 250, .55 * eob(prog(u, 0, .4)), 1)
     q = prog(u, .25, .35); paste(cv, SP['hbd'], W / 2, 560, (.6 + .4 * eob(q)) * pulse(t), cl(q * 3))
     q = prog(u, .75, .4); paste(cv, SP['lucay'], W / 2, 840, (1.7 - .7 * eob(q)) * pulse(t), cl(q * 3), 4 * (1 - eo(q)))
     q = prog(u, 1.6, .5); paste(cv, SP['from'], W / 2, 1040 + 20 * (1 - eo(q)), 1, q)
@@ -250,13 +263,13 @@ def zoom_frame(img, z):
     cw, ch = W / z, H / z; return img.resize((W, H), Image.BILINEAR, box=((W - cw) / 2, (H - ch) / 2, (W + cw) / 2, (H + ch) / 2))
 
 SCENES = [(0, 4, s_intro), (4, 6, s_portrait), (6, 8, s_words), (8, 10, s_snip1), (10, 12, s_book),
-          (12, 14, s_interview), (14, 16, s_signing), (16, 18, s_split), (18, 20, s_snip2), (20, 22, s_role),
-          (22, 24, s_dad), (24, 26, s_best), (26, 28, s_bowl), (28, 30, s_grid), (30, 32, s_flips), (32, 38.1, s_finale)]
+          (12, 14, s_interview), (14, 16, s_signing), (16, 18, s_split), (18, 23, s_snip2), (23, 26, s_remember),
+          (26, 28, s_role), (28, 30, s_dad), (30, 32, s_best), (32, 34, s_bowl), (34, 36, s_grid), (36, 38, s_flips), (38, 44.1, s_finale)]
 # transitions at scene starts: type, duration
 TRANS = {8: ('whip', .2), 10: ('whip', .2), 12: ('push_l', .3), 14: ('push_u', .3), 16: ('whip', .2),
-         18: ('push_l', .3), 26: ('push_l', .3), 28: ('whip', .2)}
-FLASH = {4: 1.0, 20: .9, 24: 1.0, 32: 1.0, 6: .35, 25: .6, 30: .5, 30.25: .35, 30.5: .35, 30.75: .35, 31: .35, 31.25: .35, 31.5: .35, 31.75: .5}
-SHAKE = [(4, 22), (6, 10), (6.5, 10), (7, 10), (7.5, 10), (10.75, 18), (17, 8), (21.5, 10), (23.25, 16), (24, 24), (24.5, 14), (25, 14), (26.5, 20), (32, 22), (32.75, 14)]
+         18: ('push_l', .3), 32: ('push_l', .3), 34: ('whip', .2)}
+FLASH = {4: 1.0, 6: .35, 24: 1.0, 24.5: .5, 26: .9, 30: 1.0, 31: .6, 36: .5, 36.25: .35, 36.5: .35, 36.75: .35, 37: .35, 37.25: .35, 37.5: .35, 37.75: .5, 38: 1.0}
+SHAKE = [(4, 22), (6, 10), (6.5, 10), (7, 10), (7.5, 10), (10.75, 18), (17, 8), (24, 30), (24.5, 26), (27.5, 10), (29.25, 16), (30, 24), (30.5, 14), (31, 14), (32.5, 20), (38, 22), (38.75, 14)]
 
 def scene_at(t):
     for a, b, f in SCENES:
@@ -306,8 +319,8 @@ if __name__ == '__main__':
         S.save('preview.png'); sys.exit()
     n = int(DUR * FPS)
     ff = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(FPS), '-i', '-',
-                           '-i', 'music2.wav', '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p',
-                           '-c:a', 'aac', '-b:a', '256k', '-shortest', '-movflags', '+faststart', 'reel2.mp4'], stdin=subprocess.PIPE)
+                           '-i', 'music3.wav', '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p',
+                           '-c:a', 'aac', '-b:a', '256k', '-shortest', '-movflags', '+faststart', 'reel3.mp4'], stdin=subprocess.PIPE)
     for i in range(n):
         ff.stdin.write(frame(i / FPS).tobytes())
         if i % 150 == 0: print(i, flush=True)
