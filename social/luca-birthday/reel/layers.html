@@ -1,0 +1,87 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B1F17;--mid:#1E4334;--gold:#C9960A;--yellow:#FFCF00;--cream:#F2EDE4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:transparent;font-family:'Instrument Sans',sans-serif}
+.L{width:1080px;height:1920px;position:relative;overflow:hidden}
+.dark{background:radial-gradient(ellipse 90% 55% at 50% 42%,#1E4334 0%,#0B1F17 72%)}
+.serif{font-family:'Playfair Display',serif}
+.eb{color:var(--gold);font-weight:600;letter-spacing:.24em;text-transform:uppercase;font-size:30px}
+.c{position:absolute;left:0;right:0;text-align:center;color:var(--cream)}
+.y{color:var(--yellow);font-style:italic;font-weight:400}
+.shadow{text-shadow:0 4px 30px rgba(0,0,0,.6)}
+</style></head><body>
+
+<!-- 1 intro -->
+<div class="L dark" id="bg1"></div>
+<div class="L" id="tx1">
+  <div class="c" style="top:760px"><div class="eb">10 November</div>
+  <div class="serif" style="font-size:96px;line-height:1.1;margin-top:40px">Today we celebrate<br><span class="y">the voice behind LIT</span></div></div>
+</div>
+
+<!-- 2 portrait -->
+<div class="L dark" id="bg2">
+  <div style="position:absolute;left:140px;top:380px;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(255,207,0,.22),transparent 65%)"></div>
+  <img src="Luca_Cutout.png" style="position:absolute;bottom:430px;left:50%;transform:translateX(-50%);width:1000px">
+  <div style="position:absolute;left:0;right:0;bottom:0;height:700px;background:linear-gradient(transparent,#0B1F17 45%)"></div>
+</div>
+<div class="L" id="tx2">
+  <div class="c" style="bottom:200px"><div class="serif" style="font-size:120px;font-weight:700">Luca <span class="y">Allam</span></div>
+  <div class="eb" style="margin-top:24px">Host · Luca's Insight Track</div></div>
+</div>
+
+<!-- 4 best shows -->
+<div class="L dark" id="bg4">
+  <div style="position:absolute;left:40px;right:40px;top:820px;background:#fff;border-radius:28px;padding:22px;box-shadow:0 40px 120px rgba(0,0,0,.6)">
+    <img src="bestshows.jpeg" style="width:100%;display:block;border-radius:14px">
+  </div>
+</div>
+<div class="L" id="tx4">
+  <div class="c" style="top:420px"><div class="eb">2025</div>
+  <div class="serif" style="font-size:92px;line-height:1.1;margin-top:30px">Named among the<br><span class="y">Best Shows of the year</span></div></div>
+  <div class="c" style="top:1300px;font-size:36px;color:rgba(242,237,228,.75)">From one idea to one of the region's best.</div>
+</div>
+
+<!-- 7 family -->
+<div class="L" id="bg7" style="background:var(--cream)">
+  <img src="bts.png" style="position:absolute;top:150px;left:-60px;width:1200px">
+  <div style="position:absolute;left:0;right:0;bottom:0;height:900px;background:linear-gradient(rgba(242,237,228,0),var(--cream) 30%)"></div>
+</div>
+<div class="L" id="tx7a"><div class="c serif" style="top:1270px;color:#0B1F17;font-size:84px;font-weight:700">A loving husband.</div></div>
+<div class="L" id="tx7b"><div class="c serif" style="top:1390px;color:#0B1F17;font-size:84px;font-weight:700">A proud father of <span style="color:var(--gold);font-style:italic;font-weight:400">two boys.</span></div></div>
+<div class="L" id="tx7c"><div class="c" style="top:1560px;color:#4A5E56;font-size:38px;letter-spacing:.02em">And on any court, field or green — always game on.</div></div>
+
+<!-- 8 thank you -->
+<div class="L" id="bg8" style="background:#0B1F17">
+  <img src="point.png" style="position:absolute;bottom:0;left:0;width:1080px">
+  <div style="position:absolute;left:0;right:0;top:560px;height:420px;background:linear-gradient(#0B1F17 15%,rgba(11,31,23,0))"></div>
+</div>
+<div class="L" id="tx8">
+  <div class="c serif" style="top:200px;font-size:84px;line-height:1.12">Thank you for every<br>question that <span class="y">made us think.</span></div>
+</div>
+
+<!-- 9 finale -->
+<div class="L dark" id="bg9"><div id="conf"></div></div>
+<div class="L" id="tx9">
+  <div class="c" style="top:520px"><img src="logo.png" style="width:220px;border-radius:34px"></div>
+  <div class="c serif" style="top:860px;font-size:150px;font-weight:700;line-height:1">Happy<br>Birthday</div>
+  <div class="c serif y" style="top:1170px;font-size:230px">Luca</div>
+  <div class="c" style="top:1530px;font-size:38px;color:rgba(242,237,228,.8)">Here's to many more chapters 💛</div>
+  <div class="c eb" style="top:1660px;font-size:24px">— from all of us at LIT</div>
+</div>
+
+<!-- snippet frame: label strip shown above landscape clips -->
+<div class="L" id="txS">
+  <div class="c" style="top:520px"><span class="eb" style="font-size:26px">● From Luca's world</span></div>
+</div>
+
+<script>
+let s=11;const r=()=>(s=(s*16807)%2147483647)/2147483647;const cols=['#FFCF00','#C9960A','#F2EDE4','#3E7A5E'];
+const c=document.getElementById('conf');
+for(let i=0;i<70;i++){const e=document.createElement('i');const w=8+r()*16;const edge=r()<.55;
+ let x=edge?(r()<.5?r()*.12:.88+r()*.12):r(),y=edge?r():(r()<.5?r()*.2:.9+r()*.1);
+ Object.assign(e.style,{position:'absolute',left:x*1080+'px',top:y*1920+'px',width:w+'px',height:(r()<.4?w:w*2.4)+'px',background:cols[i%4],transform:`rotate(${r()*360}deg)`,opacity:.5+r()*.5,borderRadius:r()<.3?'50%':'3px'});c.appendChild(e);}
+</script>
+</body></html>
