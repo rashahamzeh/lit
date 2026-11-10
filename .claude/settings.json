@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "deny": [
+      "mcp__Gmail__send_message",
+      "mcp__Gmail__reply",
+      "mcp__Gmail__forward"
+    ]
+  }
+}
